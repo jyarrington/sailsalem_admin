@@ -14,7 +14,6 @@ class db {
 	private $conn;
 	private $debug = 1;
 
-
 	
 	protected function open ()
 	{

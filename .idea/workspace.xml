@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7498829b-ab98-4896-a653-ad634aabff3d" name="Default" comment="" />
+    <list default="true" id="7498829b-ab98-4896-a653-ad634aabff3d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/db.php" afterPath="$PROJECT_DIR$/includes/db.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="sailsalemadmin.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/archive2008.sql" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1364463238000" ignored="false" />
     <file path="/search.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1364783625411" ignored="false" />
     <file path="/a.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1364774633718" ignored="false" />
-    <file path="/db.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1364775746993" ignored="false" />
+    <file path="/db.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365311156028" ignored="false" />
     <file path="/session_detail.ddl.sql" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365299594562" ignored="false" />
     <file path="/sailsalem.css" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365257089182" ignored="false" />
     <file path="/publicregister.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365294639330" ignored="false" />
@@ -22,7 +27,9 @@
     <file path="/sailing_program.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365301555637" ignored="false" />
     <file path="/controls.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365307818554" ignored="false" />
     <file path="/session_student.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365305751810" ignored="false" />
-    <file path="/secure.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365309761559" ignored="false" />
+    <file path="/secure.php" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365310879987" ignored="false" />
+    <file path="/Dummy.txt" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365310648373" ignored="false" />
+    <file path="/.gitignore" changelist="7498829b-ab98-4896-a653-ad634aabff3d" time="1365311248346" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,16 +64,25 @@
       <file leaf-file-name="db.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/db.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="0" selection-start="172" selection-end="204" vertical-scroll-proportion="-6.875">
+            <state line="14" column="21" selection-start="277" selection-end="277" vertical-scroll-proportion="-8.75">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="secure.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="15" selection-start="93" selection-end="93" vertical-scroll-proportion="0.036585364">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="secure.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/secure/secure.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="1" selection-start="224" selection-end="224" vertical-scroll-proportion="0.09422111">
+            <state line="11" column="1" selection-start="223" selection-end="223" vertical-scroll-proportion="-3.125">
               <folding />
             </state>
           </provider>
@@ -88,15 +104,6 @@
               <folding>
                 <marker date="1365305754000" expanded="false" signature="3912:3921" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="search.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/search.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="48" selection-start="1084" selection-end="1084" vertical-scroll-proportion="-7.4583335">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -144,11 +151,17 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitLogSettings">
+    <option name="myDateState">
+      <MyDateState />
+    </option>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/login.php" />
-        <option value="$PROJECT_DIR$/includes/css/forms.css" />
         <option value="$PROJECT_DIR$/includes/page.php" />
         <option value="$PROJECT_DIR$/publicregister.php" />
         <option value="$PROJECT_DIR$/sql/student_detail.ddl.sql" />
@@ -163,6 +176,8 @@
         <option value="$PROJECT_DIR$/includes/controls.php" />
         <option value="$PROJECT_DIR$/adminregister.php" />
         <option value="$PROJECT_DIR$/secure/secure.php" />
+        <option value="$PROJECT_DIR$/includes/db.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -173,7 +188,7 @@
     <option name="width" value="1359" />
     <option name="height" value="1418" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -295,7 +310,7 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="options.lastSelected" value="editor.preferences.appearance" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="last_opened_file_path" value="$USER_HOME$/Applications" />
     <property name="FullScreen" value="false" />
     <property name="dynamic.classpath" value="false" />
@@ -474,13 +489,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sql/student_detail.ddl.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="102" selection-start="656" selection-end="656" vertical-scroll-proportion="-4.2">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sql/session_detail.ddl.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="43" selection-start="831" selection-end="831" vertical-scroll-proportion="-9.6">
@@ -579,16 +587,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/db.php">
+    <entry file="file://$PROJECT_DIR$/secure/secure.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="172" selection-end="204" vertical-scroll-proportion="-6.875">
+        <state line="11" column="1" selection-start="223" selection-end="223" vertical-scroll-proportion="-3.125">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/secure/secure.php">
+    <entry file="file://$PROJECT_DIR$/includes/db.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="1" selection-start="224" selection-end="224" vertical-scroll-proportion="0.09422111">
+        <state line="14" column="21" selection-start="277" selection-end="277" vertical-scroll-proportion="-8.75">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="15" selection-start="93" selection-end="93" vertical-scroll-proportion="0.036585364">
           <folding />
         </state>
       </provider>
