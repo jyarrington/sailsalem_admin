@@ -1,0 +1,49 @@
+body {
+	font-family: Arial,sans-serif; 
+	font-size: .8em;
+	}
+h1 {
+	font-size: 1.6em;
+}
+td {
+	font-size: .8em;	
+}
+th {
+	font-size: .8em;	
+}
+<!--
+table 
+	{
+	margin: 0px;
+	}
+td {
+	vertical-align: top;
+	font-family: sans-serif;
+	margin: 0px;	
+	font-size: .8em;
+} -->
+
+@media only screen and (max-device-width: 480px) {
+  body {
+    font-family: sans-serif;
+  }
+  
+  td {
+  	font-family: sans-serif;
+  }
+}
+
+@media print {
+		
+	#menu, #sectionMenu, .sessionselect, div.fg-toolbar {
+		display: none;
+		}
+	.break { page-break-after: always; }
+	
+	@page {
+	  size: A4 landscape;
+	}
+}
+
+
+	

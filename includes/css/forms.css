@@ -1,0 +1,43 @@
+
+fieldset.publicreg {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #333333;
+    background-color: #FFFFCC;
+    margin: 20px 0px 20px 0px;
+    width: 700px;
+    position: relative;
+    display: block;
+    padding: 0 10px 10px 10px;
+
+}
+
+fieldset.publicreg legend {
+    font-weight: bold;
+    background-color: #FFFFFF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #333333;
+    padding: 2px;
+    margin: 0px 0px 10px 0px;
+    position: relative;
+    top: -12px;
+
+}
+
+fieldset.publicreg label {
+    float: left;
+    width: 160px;
+    text-align: right;
+    margin: 0px 5px 0px 0px;
+}
+
+fieldset.publicreg label.error {
+    float: right;
+    color: #ff0000;
+    vertical-align: bottom;
+    position: absolute;
+    margin-left: 5px;
+    width: 300px;
+    text-align: left;
+}
