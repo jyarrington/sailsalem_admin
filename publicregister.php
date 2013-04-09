@@ -69,13 +69,13 @@ function showPrintForms ($student, $session_student) {
 
     ";
 
-		$confirmation_footer = "
+		$confirmation_footer = '
 			<strong>Forms: </strong><br/><br/>
 			
-			<a href=\"./includes/SailSalemRegistrationForms.pdf\">Swim Form and Medical Information Form</a> <br/><br/>
+			<a href="/public/sail_salem_forms_2013.pdf">Swim Form and Medical Information Form</a> <br/><br/>
 
 			<br><br>
-		";
+		';
 
    $confirmation = str_replace("[STUDENT_NAME]", $student_name, $confirmation_header);
 
@@ -186,9 +186,7 @@ function showPrintForms ($student, $session_student) {
 			$_form_header = "
 			
 			<p>Sail Salem is excited to announce the 2013 sailing season.  This year is going to be our best yet.</p>
-			
 			<p>Classes are available for age groups 8 to 18.  Go to our youth sailing page for more information.</p>
-			
 			<p>Registration for classes opens at 10:00 am on March 26th.</p>
 			
 			";
@@ -284,7 +282,7 @@ function showPrintForms ($student, $session_student) {
 				
 				<b>Emergency Information and Notes</b><br/>
 				<label>Emergency Number		</label><input type="text" name="emergency_number" value="" tabindex="19"><br/>
-				<label>Notes			</label><input type="text" name="Notes" value="" width="50 tabindex="20"><br/>
+				<label>Notes			</label><input type="text" name="Notes" value="" width="50" tabindex="20"><br/>
 
         <?php
                 $sailing_program = new sailing_program();

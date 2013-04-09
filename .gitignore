@@ -2,3 +2,5 @@
 secure/*
 includes/db.php
 config.php
+idea/
+idea/*
