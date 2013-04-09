@@ -187,13 +187,13 @@ class register {
 
 	
 	function showRegistrationForm ($id_student) {
-	
+
 		$controls = new controls;
 
 		$student = new student;
 		$session_student = new session_student();
 		$form_student = new form_student();
-		
+
 		echo $id_student;
 		
 		if ($id_student > 0) {
@@ -212,6 +212,10 @@ class register {
       // TODO: More than one session
 			$rs_sessions = $session_student->getByStudent();
 
+      while ($selected_row = mysql_fetch_array($rs_sessions)) {
+         $sr[] = $selected_row["id_sailing_session"];
+      }
+      //var_dump($sr);
       var_dump($rs_sessions);
 
 			$form_student->id_student = $student->id_student;	
@@ -294,14 +298,16 @@ class register {
 
         $resultSet = $sailing_program->getPrograms();
 
-        while ($selected_row = mysql_fetch_array($rs_sessions)) {
-           $sr[] = $selected_row["id_sailing_session"];
-        }
-        //var_dump($sr);
 
         while ($row = mysql_fetch_array($resultSet)) {
           echo "<b>" . $row["class_name"] . "</b><br/>";
-          $controls->sessionRadio($row["class_name"], $row["id_sailing_program"], $sr);
+
+          if ($id_student > 0) {
+            $controls->sessionRadio($row["class_name"], $row["id_sailing_program"], $sr);
+          } else {
+            $controls->sessionRadio($row["class_name"], $row["id_sailing_program"]);
+          }
+
           echo "<br/>";
         }
 ?>

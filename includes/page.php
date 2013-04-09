@@ -6,14 +6,12 @@ class page {
 
 
 	?>
-
-
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html xmlns="http://www.w3.org/1999/xhtml">
 			
 			<head profile="http://gmpg.org/xfn/1">
 
-			  <title>$title</title>
+			  <title>Sail Salem Registration</title>
 				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 				
 				<style type="text/css" media="screen">
@@ -31,10 +29,9 @@ class page {
 			
 			<div id="dropmenu_container">
 			<ul id="dropmenu">
-			<li class="page_item page-item-3"><a href="http://www.sailsalem.org" title="Home">About Us</a>
+			<li class="page_item page-item-3"><a href="http://www.sailsalem.org" title="Home">Home</a>
 			</li>
-			<li class="page_item"><a href="/publicregister.php" title="Registration">Youth Registration</a>
-			
+
 			</div>
 			
 				<div id="content">

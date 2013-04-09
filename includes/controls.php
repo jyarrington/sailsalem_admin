@@ -2,7 +2,7 @@
 
 class controls {
 	
-	function sessionRadio($name, $id_sailing_program, $ar_sessions) {
+	function sessionRadio($name, $id_sailing_program, $ar_sessions = "") {
 	
 		$sailing_session = new sailing_session();
 		
@@ -17,11 +17,13 @@ class controls {
       //var_dump($row);
       //var_dump($selectedSession);
 
-      foreach ($ar_sessions as $value) {
-        //var_dump($value);
-        if ($row["id_sailing_session"] == $value) {
-          $checked = "checked";
-        }
+      if (is_array($ar_sessions)) {
+        foreach ($ar_sessions as $value) {
+         //var_dump($value);
+         if ($row["id_sailing_session"] == $value) {
+           $checked = "checked";
+         }
+       }
       }
 			$disabled = "";
 			$style="";

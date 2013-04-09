@@ -3,6 +3,7 @@
 include ('config.php');
 include ('db.php');
 include_once ('student.php');
+include_once ('sailing_program.php');
 include_once ('sailing_session.php');
 include_once ('session_student.php');
 include ('user.php');
@@ -35,59 +36,73 @@ class register {
 		echo $r;
 	}
 	
-	
+//@TODO - Send session_student as an array
 function showPrintForms ($student, $session_student) {
 		
 		$sailing_session = new sailing_session();
-		
-		$session_detail = $sailing_session->getSessionDetail($session_student->id_sailing_session);
-		
-		$row = mysql_fetch_array($session_detail);
-		
-		$class_date = date("F j, Y", strtotime($row['start_date']));
-		$class_time = date("g:i a", strtotime($row['start_date']));
-		//$class_date = $row['start_date'];
+
+
 		$student_name = $student->first_name . " " . $student->last_name;
 			
-		$confirmation = "		
+		$confirmation_header = "
 			<center><strong>Registration Confirmation</strong></center><br><br>
 			<strong>Thank you for signing up for Sail Salem's summer youth program.</strong><br><br>
 			
-			[STUDENT_NAME] is signed up for classes beginning the week of [CLASS_DATE].<br>  
-			Classes	begin each day at [CLASS_TIME].  
-			
+			[STUDENT_NAME] is signed up for classes.  Class information is listed below.
+
+
 			<br/><br/>
 			
 			Please print out the medical information form and swim form, 
-			complete them, and mail them, along with $1 to the address below. <br/><br/>
-			
-			Sail Salem<br/>
-			Attn: Jason Yarrington<br/>
-			209 Essex Street, Suite 201<br/>
-			Salem MA, 01970<br/>
-			
-			Forms: <br/><br/>
+			complete them, and bring them with you to the first day of class. <br/><br/>
+
+			If you signed up for the advanced beginner classes or the racing clinic
+			our program director will call you to arrange payment.  <br/><br/>
+		";
+
+    $confirmation_class = "
+
+    Class Name: [CLASS_NAME]<br/>
+    Class Date: [MONTH_NAME] [DAY_NAME]<br/>
+		Class Time: [TIME_OF_DAY]<br/>
+		<br/>
+
+    ";
+
+		$confirmation_footer = "
+			<strong>Forms: </strong><br/><br/>
 			
 			<a href=\"./includes/SailSalemRegistrationForms.pdf\">Swim Form and Medical Information Form</a> <br/><br/>
-			
-			Also, if you have a moment, would you please answer a few demographic questions.
-			Sail Salem is able to offer our youth programs through the generousity of local companies and private citizens.  
-			We also get a portion of our funding from public grants.  Information about the demographics
-			of the families involved helps us apply for these grants.  All information anonymous, and you 
-			don't have to respond to anything you don't want to.
-			
+
 			<br><br>
-		";			
-		
-		$confirmation = str_replace("[CLASS_DATE]", $class_date, $confirmation);
-		$confirmation = str_replace("[CLASS_TIME]", $class_time, $confirmation);
-		$confirmation = str_replace("[STUDENT_NAME]", $student_name, $confirmation);
-		
+		";
+
+   $confirmation = str_replace("[STUDENT_NAME]", $student_name, $confirmation_header);
+
+		foreach ($_POST["id_sailing_session"] as $_id_sailing_session) {
+      $_c = $confirmation_class;
+
+	    $session_detail = $sailing_session->getSessionDetail($_id_sailing_session);
+
+      $row = mysql_fetch_array($session_detail);
+
+      $_c = str_replace("[CLASS_NAME]", $row["class_name"], $_c);
+      $_c = str_replace("[MONTH_NAME]", $row["month_name"], $_c);
+      $_c = str_replace("[DAY_NAME]", $row["day_name"], $_c);
+      $_c = str_replace("[TIME_OF_DAY]", $row["time_of_day"], $_c);
+
+      $confirmation .= $_c;
+    }
+
+    $confirmation .= $confirmation_footer;
+
 		echo $confirmation;
 		
 	}
 	
 	function submit () {
+
+    //var_dump($_POST);
 
 		$student = new student();
 		
@@ -110,8 +125,10 @@ function showPrintForms ($student, $session_student) {
 		$student->email2 = $_POST["email2"];
 		$student->emergency_number = $_POST["emergency_number"];
 		$student->t_shirt_size = $_POST["t_shirt_size"];
-		$student->notes = $POST["notes"];
-		
+		$student->notes = $_POST["notes"];
+
+    //var_dump($student);
+
 		if ($_POST["formtype"] == "Insert" ) {
 
 			$student->getStudentID();
@@ -119,20 +136,24 @@ function showPrintForms ($student, $session_student) {
 			//echo "Test for student id" . $student->id_student . "</br>";
 			
 			if ($student->id_student > 0) {
-				echo "This student appears to be already registered.  Email jason@sailsalem.org for assistance." ;
+				echo "This student appears to be already registered.  Email bri@sailsalem.org for assistance." ;
 			} else {
 				$result = $student->insert() ;
+        //var_dump($result);
 				if ($student->id_student > 0) {	
 					$session_student = new session_student();
-				
-					$session_student->id_student = $student->id_student;
-					$session_student->id_sailing_session = $_POST["id_sailing_session"];
-					
-					$session_student->insert();
+
+          foreach ($_POST["id_sailing_session"] as $_id_sailing_session) {
+
+            $session_student->id_student = $student->id_student;
+            $session_student->id_sailing_session = $_id_sailing_session;
+
+            $session_student->insert();
+          }
 	
 					$message = new message();
 					
-					$message->send_confirmation($student, $session_student);
+					//$message->send_confirmation($student, $session_student);
 	
 					$reg = new register;
 					
@@ -141,7 +162,7 @@ function showPrintForms ($student, $session_student) {
 			
 			}			 
 		} else {
-			echo "There was a problem with your registration.  Email info@sailsalem.org for assistance." ;
+			echo "There was a problem with your registration.  Email " . $HELP_EMAIL . " for assistance." ;
 		}		
 	}
 
@@ -152,19 +173,12 @@ function showPrintForms ($student, $session_student) {
 		if ( $status == "closed" ) {
 			$_form_header = " 
 			
-			<p>Welcome to our youth sign-ups. Please fill in the form below to reserve your spot in class.</p>
+			<p>Please fill in the form below to reserve your spot in class.</p>
 
-			<h2>8 to 12 Year Old Group</h2>
+			<h2>Some of our classes are full</h2>
 
-			<p>We are sorry to announce that our 8-12 year old groups are full at the moment. However, we do get cancellations throughout the season and we are currently forming a waitlist for these classes. Please email your contact information and child's age to jason+waitlist@sailsalem.org. We will contact people on the wait list as we have more openings.</p>
-
-			<p>We are excited by demand for the program, and regret that we don't have the capacity yet to meet it. But, you have our commitment to keep working to build more capacity in the coming seasons.</p>
-
-			<h2>13 to 18 Year Old Group</h2>
-
-			<p>We still have limited spots available in the 13 to 18 year old group. Also, if you have a child that is 11 or 12 and has participated in Sail Salem before, then you can register for a 13 to 18 year old class. We teach this class on J-24's. To get the most out of the experience, it is helpful if children are a little bit more physically developed. It just takes a little more muscle to participate and learn on the boats than it does in an Opti. If you have questions, email us.</p>
-
-			<p>Thank you for your support.</p>
+			<p>Our classes are filling up quickly.  Please review the number of open spots
+		  and reserve your spot now.
 			
 			";
 			
@@ -183,10 +197,28 @@ function showPrintForms ($student, $session_student) {
 			
 			$_form_header = "
 			
-			<p>Sail Salem is excited to announce the 2011 sailing season.  This year is going to be our best yet.</p>
-			
-			<p>Students are grouped by ability the day of class.  All classes are open to all ability levels.  Even if you are returning for your fourth year, please pick a class by age group.
-			
+			<p>Sail Salem is excited to announce the 2013 sailing season.  This year is going to be
+			our best yet.</p>
+			<p>We are offering the following classes for children from ages 8 to 18.  Classes are taught
+			on Optimists and 420s.
+			<h2>Beginner Class</h2>
+
+			<p>If this is your child's first time sailing, sign up for our beginner class.  This is
+			a great place to get started.  It is a free class, taught in half days for one week.  Children
+			work in small groups with a small child to instructor ratio and learn the basics of sailing.</p>
+			<p><strong>Class Price: </strong> Free</p>
+
+			<h2>Advanced Beginner</h2>
+			<p>Once you have tried sailing and are hooked, come back for full day lessons with small
+			student to instructor ratio groups.  Explore more about sailing and the ocean and continue
+			to hone your skills.</p>
+			<p><strong>Class Price: </strong> $300</p>
+
+			<h2>Junior Racing Clinic</h2>
+			<p>Each year hundreds of young sailors come from all around New England to
+			race in Marblehead Junior Race week.  Our coaches take a small team of talented
+			junior sailors over to Junior Race week to represent Sail Salem.</p>
+			<p><strong>Race Clinic Price: </strong> $150</p>
 			";
 		}
 			
@@ -201,7 +233,7 @@ function showPrintForms ($student, $session_student) {
 
 
 		$today = getdate();
-		$registration_opens = "2011-03-26 09:00:00";
+		$registration_opens = "2013-04-07 09:00:00";
 		$_status = "open";
 		
 		if ($_status <> "closed") {
@@ -233,9 +265,9 @@ function showPrintForms ($student, $session_student) {
 				<label for="last_name">Last Name</label><input type="text" name="last_name" value="" tabindex="2"> <br/>
 				<label for="birth_date">BirthDate</label><input type="text" name="birth_date" value="" tabindex="3"> <br/>
 				<label for="address">Address</label><input type="text" name="address" value="" tabindex="4"><br/>
-				<label>City			</label><input type="text" name="city" value="Salem" tabindex="5"><br/>
-				<label>State			</label><input type="text" name="state" value="MA" tabindex="6"><br/>
-				<label>Zip				</label><input type="text" name="zip" value="01970" tabindex="7"><br/>
+				<label>City			</label><input type="text" name="city" value="" tabindex="5"><br/>
+				<label>State			</label><input type="text" name="state" value="" tabindex="6"><br/>
+				<label>Zip				</label><input type="text" name="zip" value="" tabindex="7"><br/>
 				<label>SchoolGrade		</label><input type="text" name="school_grade" value="" tabindex="8"><br/>
 
 				<b>Parents/Guardian</b><br/>
@@ -254,27 +286,24 @@ function showPrintForms ($student, $session_student) {
 				<label>Emergency Number		</label><input type="text" name="emergency_number" value="" tabindex="19"><br/>
 				<label>Notes			</label><input type="text" name="Notes" value="" width="50 tabindex="20"><br/>
 
-			
-			<b>Children 8 to 12 -- Beginner</b>	<br/>
-        This class is a half day class and is free.  It is available to anyone who wants to try sailing
-         for the first time<br/>
-			<?php $controls->sessionRadio("Youth Beginner", "6"); ?><br/>
+        <?php
+                $sailing_program = new sailing_program();
 
-			<b>Children 13 to 18 -- Beginner</b><br/>
-      This class is a half day class and is free.  It is available to anyone who wants to try sailing
-        for the first time<br/>
+                $resultSet = $sailing_program->getPrograms();
 
-      <?php $controls->sessionRadio("Teen Beginner", "7"); ?><br/>
 
-      <b>Children 8 to 12 -- Advanced Beginner</b><br/>
-      This class is a full day class open to any child who has taken the beginner class.  The
-        class cost is $225.<br/>
-      <?php $controls->sessionRadio("Youth Advanced Beginner", "7"); ?><br/>
+                while ($row = mysql_fetch_array($resultSet)) {
+                  echo "<b>" . $row["class_name"] . "</b><br/>";
 
-      <b>Children 13 to 18 -- Advanced Beginner</b><br/>
-        This class is a full day class open to any child who has taken the beginner class.  The
-          class cost is $225.<br/>
-      <?php $controls->sessionRadio("Teen Advanced Beginner", "8"); ?><br/>
+                  if ($id_student > 0) {
+                    $controls->sessionRadio($row["class_name"], $row["id_sailing_program"], $sr);
+                  } else {
+                    $controls->sessionRadio($row["class_name"], $row["id_sailing_program"]);
+                  }
+
+                  echo "<br/>";
+                }
+        ?>
 
 			<p>
 				<input type="submit" name="submit" value="Enter">
@@ -317,7 +346,50 @@ $page->echoHeader($title);
 <script type="text/javascript" src="/publicregister.js"></script>
 
 
-<link type="text/css" rel="stylsheet" href="/includes/css/forms.css" media="all"/>
+
+  <style type="text/css" media="screen">
+
+  		fieldset.publicreg {
+  			border-width:1px;
+  			border-style:solid;
+  			border-color:#333333;
+  			background-color:#FFFFCC;
+  			margin:20px 0px 20px 0px;
+  			width:700px;
+  			position:relative;
+  			display:block;
+  			padding: 0 10px 10px 10px;
+
+  		}
+
+  		fieldset.publicreg legend{
+  			font-weight:bold;
+  			background-color:#FFFFFF;
+  			border-width:1px;
+  			border-style:solid;
+  			border-color:#333333;
+  			padding:2px;
+  			margin:0px 0px 10px 0px;
+  			position:relative;
+  			top: -12px;
+
+  		}
+
+  		fieldset.publicreg label{
+  			float:left;
+  			width:160px;
+  			text-align:right;
+  			margin:0px 5px 0px 0px;
+  		}
+
+  		fieldset.publicreg input.text {
+  			width:300px;
+  		}
+
+  		fieldset.publicreg label.error { float: right; color: red; vertical-align: bottom; position:absolute; margin-left: 5px; width:300px; text-align:left;}
+
+  	</style>
+
 <?php
 
 $reg = new register;
