@@ -1,6 +1,6 @@
 # Ignore configuration files that may contain sensitive information.
 secure/*
-includes/db.php
+#includes/db.php
 config.php
 idea/
 idea/*
