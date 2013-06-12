@@ -12,10 +12,13 @@ include ('page.php');
 include ('form_student.php');
 include ('form.php');
 
-class register {
+/*
+ * Manages the registration form for the administrator view.
+ * @TODO: Need to refactor the various registration forms.
+ */
+class admin_register {
 	
 	function checked ($checkboxname) {
-    var_dump($checkboxname);
 		if (array_key_exists($checkboxname, $_POST)) {
 			$r = 1 ;
 		} else {
@@ -197,11 +200,8 @@ class register {
 		echo $id_student;
 		
 		if ($id_student > 0) {
-				
-			echo "Hello";
-			
+
 			$student->id_student = $id_student;
-			
 			$student->get();
 			
 			//Get the assigned session
@@ -212,8 +212,8 @@ class register {
       // TODO: More than one session
 			$rs_sessions = $session_student->getByStudent();
 
-      while ($selected_row = mysql_fetch_array($rs_sessions)) {
-         $sr[] = $selected_row["id_sailing_session"];
+      foreach ($rs_sessions as $row) {
+         $sr[] = $row["id_sailing_session"];
       }
       //var_dump($sr);
       var_dump($rs_sessions);
@@ -403,7 +403,7 @@ if (!isset($_SESSION['admin_role'])
 
 
 
-$reg = new register;
+$reg = new admin_register;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
 	

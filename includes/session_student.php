@@ -2,12 +2,9 @@
 
 class session_student {
 
+  //BUG - WE can't assume only one session anymore.
 	var $id_sailing_session;
 	var $id_student;
-	
-//	function __constructor () {
-//		$db = new db;
-//	}
 
 	function insert() {
 
@@ -62,8 +59,6 @@ class session_student {
 				mysql_real_escape_string($this->id_student, $link)
 			);
 
-		//echo "<pre>" . $query . "</pre>";
-						
 		$db->delete($query);
 	}
 	
@@ -79,16 +74,14 @@ class session_student {
 		
 		$db = new db;
 		
-		$resultSet = $db->select($query);
-		$row = mysql_fetch_array($resultSet);
-
-		$this->id_sailing_session = $row['id_sailing_session'];
-		$this->id_student = $row['id_student'];
+    $resultSet = $db->select($query) or die("session_student->getBySailingSession():" . mysql_error() . $query);
+    $results = $db->results_to_array($resultSet);
+		return $results;
 		
 	}
 	
 	function getByStudent () {
-		
+
 		$query = "
 				SELECT 
 					* 
@@ -98,15 +91,11 @@ class session_student {
 					id_student = " . $this->id_student;
 		
 		$db = new db;
-		
-		// print $query;
-		
-		$resultSet = $db->select($query) or die("session_student->getByStudent():" . mysql_error() . $query);
-//		$row = mysql_fetch_array($resultSet);
 
-//		$this->id_sailing_session = $row['id_sailing_session'];
-//		$this->id_student = $row['id_student'];
-    return $resultSet;
+    // BUG - This used to assume a single session per student.  So now we aren't setting the id_sailing_session
+	$resultSet = $db->select($query) or die("session_student->getByStudent():" . mysql_error() . $query);
+    $results = $db->results_to_array($resultSet);
+    return $results;
 		
 	}
 }

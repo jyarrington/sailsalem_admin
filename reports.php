@@ -1,7 +1,6 @@
 <?php /**/ ?><?php
 include ('config.php');
 include_once ('db.php');
-
 include_once ('student.php');
 include_once ('session_student.php');
 include_once ('sailing_session.php');
@@ -19,9 +18,9 @@ class reports {
 		$rowNumber = 0;
 		
 		echo "<table>";
-		
-		while ($row = mysql_fetch_array($rs_session_counts, MYSQL_ASSOC)) {
-			
+
+    foreach ($rs_session_counts as $row) {
+
 			if ($rowNumber == 0) {
 				echo "<tr>" ;
 							
@@ -113,11 +112,7 @@ class reports {
 		} else {
 			$_start_date = "";
 		}
-		
-		echo "<!--";
-		print_r ($_REQUEST);
-		echo "-->";
-		
+
 		$controls = new controls;
 		
 		echo '<form action="reports.php" method="post" class="sessionselect">' ;
@@ -137,9 +132,15 @@ class reports {
 			$student = new student();
 			
 			$sailing_session = new sailing_session();
-			
+
+      // @TODO convert this to loop over an array and test;
 			$rs_sailing_sessions = $sailing_session->getSessionsByStartDate($_start_date);
-			
+
+      //$db = new db();
+
+      // @BUG - For some reason there is nothing in this array.
+      //$results = $db->results_to_array($rs_sailing_sessions);
+
 			while ($row = mysql_fetch_array($rs_sailing_sessions, MYSQL_ASSOC)) {
 				
 				echo "<strong><em>" . $row["month_name"] . " " . $row["day_name"] . " -- " . $row["time_of_day"] . "</em> -- " . $row["class_name"] . 
@@ -271,9 +272,7 @@ include ('menu.php');
 	$reports = new reports;
 	
 	if (array_key_exists("id", $_REQUEST)) {
-		
 		$reportID = $_REQUEST["id"] ;
-		
 	}
 	
 	if (array_key_exists("reportID", $_POST)) {

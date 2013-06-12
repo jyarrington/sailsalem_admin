@@ -101,7 +101,7 @@ class controls {
 	
 		$sailing_session = new sailing_session();
 		
-		$sailing_session->start_date = $start_date;
+		$sailing_session->start_date = $selected_start_date;
 		
 		$rs_sailing_sessions = $sailing_session->getSessionStartDates();
 	
@@ -109,7 +109,7 @@ class controls {
 				
 		echo "<select name='sessionStartDate'>\n";
 				
-		echo "<option value = ''></option>\n" ;
+		echo "<option value = ''>--</option>\n" ;
 		
 		while ($row = mysql_fetch_array($rs_sailing_sessions, MYSQL_ASSOC)) {
 				if ($row["start_date"] == $selected_start_date) {

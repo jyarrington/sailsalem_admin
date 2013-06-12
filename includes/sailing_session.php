@@ -76,7 +76,7 @@ class sailing_session {
 		
 		$db = new db;
 		
-		$resultSet = $db->select($query);
+		$rs = $db->select($query);
 		$row = mysql_fetch_array($rs);
 
 		$this->start_date = $row['start_date'];
@@ -85,7 +85,12 @@ class sailing_session {
 		$this->student_limit = $row['student_limit'];
 		
 	}
-
+/*
+ * getSessionStartDates
+ * Pulls a list of StartDates for all programs.
+ *
+ * JMY - Removed where clause that filtered on only two types of classes
+ */
 	function getSessionStartDates () {
 			
 		$query = "
@@ -95,12 +100,10 @@ class sailing_session {
 					date(start_date) AS start_date
 				FROM 
 					sailing_session
-				WHERE
-					id_sailing_program IN (1,2)
 				ORDER BY
 					date(start_date)"
 		;
-		
+
 		$db = new db;
 		
 		$resultSet = $db->select($query);
@@ -121,17 +124,15 @@ class sailing_session {
 						sailing_session AS B
 						  ON A.id_sailing_session = B.id_sailing_session
 				WHERE
-					A.id_sailing_program IN (1,2)
-					AND date(B.start_date) = '" . $start_date . "'   
+					date(B.start_date) = '" . $start_date . "'
 				ORDER BY
 					A.id_sailing_program, B.start_date"
 		;
 		
 		$db = new db;
-		
-		$resultSet = $db->select($query);
-
-		return $resultSet;
+		$rs = $db->select($query);
+    $array = $db->results_to_array($rs);
+		return $array;
 	}
 	
 	function getSessions ($id_sailing_program) {
@@ -167,11 +168,14 @@ class sailing_session {
 		// print $query;
 		
 		$resultSet = $db->select($query) or die("sailing_session->getSessionDetail():" . mysql_error() . $query);
-		
-		return $resultSet;
+		$results = $db->results_to_array($resultSet);
+		return $results;
 						
 	}
-	
+
+  /*
+   * Not currently in use - 2013-06-05
+   */
 	function getAvailableSessions () {
 		
 		$query = "
@@ -186,8 +190,8 @@ class sailing_session {
 		$db = new db;
 		
 		$resultSet = $db->select($query);
-		
-		return $resultSet;	
+    $results = $db->results_to_array($resultSet);
+		return $results;
 	}
 	
 	function getAllSessions () {
@@ -202,8 +206,8 @@ class sailing_session {
 		$db = new db;
 		
 		$resultSet = $db->select($query);
-		
-		return $resultSet;
+    $results = $db->results_to_array($resultSet);
+		return $results;
 		
 	}
 

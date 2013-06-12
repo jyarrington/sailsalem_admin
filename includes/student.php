@@ -3,10 +3,6 @@
 class student {
 
 	var $id_student;
-	var $form_number = "NULL";
-	var $form_medical_info = "NULL";
-	var $form_swim = "NULL";
-	var $form_field_trip = "NULL";
 	var $paid = "NULL";
 	var $first_name;
 	var $last_name;
@@ -192,11 +188,7 @@ class student {
 			mysql_real_escape_string($this->id_student, $link)
 
 			);
-
-			//var_dump($query);
-			
 		$db->update($query);
-		
 	}
 
   function delete () {
@@ -212,11 +204,7 @@ class student {
   			",
   			mysql_real_escape_string($this->id_student, $link)
   			);
-
-  			//var_dump($query);
-
   		$db->delete($query);
-
   	}
 
 	function get () {
@@ -232,31 +220,29 @@ class student {
 		
 		$db = new db;
 		
-		$resultSet = $db->select($query) or die("student.get():" . mysql_error() . $query) ;
-		$row = mysql_fetch_array($resultSet);
+    $resultSet = $db->select($query) or die("student.get():" . mysql_error() . $query) ;
+    $row = mysql_fetch_array($resultSet);
 
-		$this->id_student = $row['id_student'];
-		$this->first_name = $row['first_name'];
-		$this->last_name = $row['last_name'];
-		$this->birth_date = $row['birth_date'];
-		$this->address = $row['address'];
-		$this->city = $row['city'];
-		$this->state = $row['state'];
-		$this->zip = $row['zip'];
-		$this->school_grade = $row['school_grade'];
-		$this->guardian_one_first_name = $row['guardian_one_first_name'];
-		$this->guardian_one_last_name = $row['guardian_one_last_name'];
-		$this->phone1 = $row['phone1'];
-		$this->phone2 = $row['phone2'];
-		$this->email1 = $row['email1'];
-		$this->email2 = $row['email2'];
-		$this->emergency_phone = $row['emergency_phone'];
-		$this->notes = $row['notes'];
-		$this->guardian_two_first_name = $row['guardian_two_first_name'];
-		$this->guardian_two_last_name = $row['guardian_two_last_name'];
+    $this->id_student = $row['id_student'];
+    $this->first_name = $row['first_name'];
+    $this->last_name = $row['last_name'];
+    $this->birth_date = $row['birth_date'];
+    $this->address = $row['address'];
+    $this->city = $row['city'];
+    $this->state = $row['state'];
+    $this->zip = $row['zip'];
+    $this->school_grade = $row['school_grade'];
+    $this->guardian_one_first_name = $row['guardian_one_first_name'];
+    $this->guardian_one_last_name = $row['guardian_one_last_name'];
+    $this->phone1 = $row['phone1'];
+    $this->phone2 = $row['phone2'];
+    $this->email1 = $row['email1'];
+    $this->email2 = $row['email2'];
+    $this->emergency_phone = $row['emergency_phone'];
+    $this->notes = $row['notes'];
+    $this->guardian_two_first_name = $row['guardian_two_first_name'];
+    $this->guardian_two_last_name = $row['guardian_two_last_name'];
     $this->paid = $row['paid'];
-
-		
 	}
 	
 	function getStudents ($id_student, $first_name, $guardian_one_name, $sailing_session ) {
@@ -354,61 +340,83 @@ class student {
 						
 	}
 
-	
+	function getStudentAndSessionDetail($where_clause) {
+
+    $query = "
+				SELECT
+				    B.id_student,
+				    B.last_name,
+				    B.first_name,
+				    B.birth_date,
+				    B.city,
+				    B.state,
+				    B.zip,
+				    B.email1,
+				    B.email2,
+				    C.id_sailing_session,
+				    C.start_date,
+				    C.id_sailing_program,
+				    D.class_name,
+				    D.class_description,
+				    D.full_day,
+				    D.age_group
+				FROM
+				    session_students AS A
+					LEFT JOIN students AS B ON A.id_student = B.id_student
+					LEFT JOIN sailing_session AS C on A.id_sailing_session = C.id_sailing_session
+					LEFT JOIN sailing_program AS D on C.id_sailing_program = D.id_sailing_program
+				WHERE
+					1=1
+					AND A.id_student IS NOT NULL
+					AND A.id_sailing_session IS NOT NULL
+					AND B.id_student IS NOT NULL
+				" . $where_clause . "
+				ORDER BY
+					B.last_name, B.first_name
+				";
+
+    //echo $query;
+    $db = new db;
+    $rs = $db->select($query);
+    return $rs;
+  }
+
 	function getStudentsBySession ($sailing_session ) {
 		echo "<pre>" . $sailing_session . "</pre>";	
 		if (trim($sailing_session) == "ALL")
 		{
 			// get all students
 			// add nothing to the where clause
-			$ar["2"] = "2";
+			$ar[0] = '1 = 1';
 		} else if (trim($sailing_session) <> "") {
-			// get just the students from a specific session
-			$ar["A.id_sailing_session"] = $sailing_session;
+			// get just the students from a specific week
+      $start_date = $sailing_session;
+			$ar[1] = "DATEDIFF(C.start_date, '" . $start_date . "') < 1";
 		} else {
 			// get all students -- add nothing to the where clause
-			$ar["1"] = "0";
+			$ar[2] = '1 = 1';
 		}
 		
 		$where = '';
 		
-		foreach ($ar as $column=>$value) {
-			$where .= " AND " . $column . " = " . $value;	 
+		foreach ($ar as $value) {
+			$where .= " AND " . $value;
 		}
-		
-		$query = "
-				SELECT 
-				    B.*, 
-				    CASE WHEN F1.id_form IS NULL THEN 0 ELSE 1 END AS form_med,
-				    CASE WHEN F2.id_form IS NULL THEN 0 ELSE 1 END AS form_swim
-				FROM 
-				    session_students AS A
-					LEFT JOIN students AS B ON A.id_student = B.id_student
-					LEFT JOIN forms_students AS F1 ON B.id_student = F1.id_student AND F1.id_form = 1
-					LEFT JOIN form AS FO1 ON F1.id_form = FO1.id_form 
-					LEFT JOIN forms_students AS F2 ON B.id_student = F2.id_student AND F2.id_form = 2
-					LEFT JOIN form AS FO2 ON F2.id_form = FO2.id_form
-				WHERE
-					1=1
-					AND A.id_student IS NOT NULL
-					AND A.id_sailing_session IS NOT NULL
-					AND B.id_student IS NOT NULL
-				" . $where . "
-				ORDER BY
-					B.last_name, B.first_name
-				";
-		
-		$db = new db;
-		
-		echo "<pre>" . ($query) . "</pre>";
-		
-		$resultSet = $db->select($query);
 
-		
-		return $resultSet;
-						
+    $db = new db();
+		$rs = $this->getStudentAndSessionDetail($where);
+    $array = $db->results_to_array($rs);
+		return $array;
 	}
-	
+
+  function getStudentsByIDAndSession ($id_student, $id_sailing_session) {
+    $where = ' AND A.id_student = ' . $id_student . ' AND A.id_sailing_session = ' . $id_sailing_session;
+    $db = new db();
+    $rs = $this->getStudentAndSessionDetail($where);
+    $array = $db->results_to_array($rs);
+    return $array;
+  }
+
 	function getUnassignedStudents () {
 		
 		$query = "
@@ -424,8 +432,6 @@ class student {
 		$db = new db;
 		
 		$resultSet = $db->select($query);
-		
-		
 		return $resultSet;
 		
 	}

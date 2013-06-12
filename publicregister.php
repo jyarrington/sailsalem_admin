@@ -11,7 +11,7 @@ include ('controls.php');
 include ('page.php');
 include ('message.php');
 
-class register {
+class public_register {
 	
 	function checked ($checkboxname) {
 		if (array_key_exists($checkboxname, $_POST)) {
@@ -35,9 +35,8 @@ class register {
 		
 		echo $r;
 	}
-	
-//@TODO - Send session_student as an array
-function showPrintForms ($student, $session_student) {
+
+  function showConfirmation ($student, array $session_student) {
 		
 		$sailing_session = new sailing_session();
 
@@ -49,7 +48,6 @@ function showPrintForms ($student, $session_student) {
 			<strong>Thank you for signing up for Sail Salem's summer youth program.</strong><br><br>
 			
 			[STUDENT_NAME] is signed up for classes.  Class information is listed below.
-
 
 			<br/><br/>
 			
@@ -77,32 +75,32 @@ function showPrintForms ($student, $session_student) {
 			<br><br>
 		';
 
-   $confirmation = str_replace("[STUDENT_NAME]", $student_name, $confirmation_header);
+    $confirmation = str_replace("[STUDENT_NAME]", $student_name, $confirmation_header);
 
-		foreach ($_POST["id_sailing_session"] as $_id_sailing_session) {
+    foreach ($session_student as $value) {
       $_c = $confirmation_class;
 
-	    $session_detail = $sailing_session->getSessionDetail($_id_sailing_session);
+      $session_detail = $sailing_session->getSessionDetail($value);
 
-      $row = mysql_fetch_array($session_detail);
-
-      $_c = str_replace("[CLASS_NAME]", $row["class_name"], $_c);
-      $_c = str_replace("[MONTH_NAME]", $row["month_name"], $_c);
-      $_c = str_replace("[DAY_NAME]", $row["day_name"], $_c);
-      $_c = str_replace("[TIME_OF_DAY]", $row["time_of_day"], $_c);
+      $_c = str_replace("[CLASS_NAME]", $session_detail[0]["class_name"], $_c);
+      $_c = str_replace("[MONTH_NAME]", $session_detail[0]["month_name"], $_c);
+      $_c = str_replace("[DAY_NAME]", $session_detail[0]["day_name"], $_c);
+      $_c = str_replace("[TIME_OF_DAY]", $session_detail[0]["time_of_day"], $_c);
 
       $confirmation .= $_c;
     }
 
     $confirmation .= $confirmation_footer;
 
-		echo $confirmation;
+    $message = new message();
+    $message->send_email($_REQUEST["email1"], "Sail Salem Registration Confirmation", $confirmation);
+    echo $confirmation;
 		
-	}
+  }
 	
 	function submit () {
 
-    //var_dump($_POST);
+    global $from_address;
 
 		$student = new student();
 		
@@ -127,37 +125,21 @@ function showPrintForms ($student, $session_student) {
 		$student->t_shirt_size = $_POST["t_shirt_size"];
 		$student->notes = $_POST["notes"];
 
-    //var_dump($student);
-
 		if ($_POST["formtype"] == "Insert" ) {
-
 			$student->getStudentID();
 			
-			//echo "Test for student id" . $student->id_student . "</br>";
-			
 			if ($student->id_student > 0) {
-				echo "This student appears to be already registered.  Email bri@sailsalem.org for assistance." ;
+				echo 'This student appears to be already registered.  Email ' . $from_address . ' for assistance.' ;
 			} else {
 				$result = $student->insert() ;
-        //var_dump($result);
 				if ($student->id_student > 0) {	
 					$session_student = new session_student();
-
           foreach ($_POST["id_sailing_session"] as $_id_sailing_session) {
-
             $session_student->id_student = $student->id_student;
             $session_student->id_sailing_session = $_id_sailing_session;
-
             $session_student->insert();
           }
-	
-					$message = new message();
-					
-					//$message->send_confirmation($student, $session_student);
-	
-					$reg = new register;
-					
-					$reg->showPrintForms ($student, $session_student) ;
+					$this->showConfirmation ($student, $_POST["id_sailing_session"]) ;
 				}
 			
 			}			 
@@ -390,7 +372,7 @@ $page->echoHeader($title);
 
 <?php
 
-$reg = new register;
+$reg = new public_register;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
 
@@ -401,5 +383,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $page->echoFooter();
-
-?>
