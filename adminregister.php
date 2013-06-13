@@ -212,8 +212,6 @@ class admin_register {
       foreach ($rs_sessions as $row) {
          $sr[] = $row["id_sailing_session"];
       }
-      //var_dump($sr);
-      var_dump($rs_sessions);
 
 			$form_student->id_student = $student->id_student;	
 			$forms = $form_student->getByStudent();
@@ -239,9 +237,6 @@ class admin_register {
 		}
 
     $str_birthdate = '';
-
-    //var_dump($student);
-    //var_dump($session_student);
 
     if ($student->birth_date !== 'NULL') {
      $str_birthdate = date('n/j/y', strtotime($student->birth_date));
