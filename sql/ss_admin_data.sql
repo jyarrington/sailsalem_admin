@@ -1303,7 +1303,7 @@ INSERT INTO `wh_sailingsession` (`year`, `Session`, `StartDate`) VALUES
 --
 DROP TABLE IF EXISTS `email_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `email_list` AS select `students`.`email1` AS `email1` from `students` union select `students`.`email2` AS `email2` from `students`;
+CREATE VIEW `email_list` AS select `students`.`email1` AS `email1` from `students` union select `students`.`email2` AS `email2` from `students`;
 
 -- --------------------------------------------------------
 
@@ -1312,7 +1312,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `session_detail`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `session_detail` AS select `A`.`id_sailing_program` AS `id_sailing_program`,`B`.`id_sailing_session` AS `id_sailing_session`,`A`.`class_name` AS `class_name`,`A`.`class_description` AS `class_description`,monthname(`B`.`start_date`) AS `month_name`,dayofmonth(`B`.`start_date`) AS `day_name`,(case when (`A`.`full_day` = 1) then '9:30am to 3:30pm' when (hour(`B`.`start_date`) = 9) then '9am to noon' when (hour(`B`.`start_date`) = 13) then '1pm to 4pm' end) AS `time_of_day`,`B`.`student_limit` AS `student_limit`,`C`.`count_student` AS `count_student`,(`B`.`student_limit` - `C`.`count_student`) AS `spaces_left`,`B`.`start_date` AS `start_date` from ((`sailing_program` `A` left join `sailing_session` `B` on((`A`.`id_sailing_program` = `B`.`id_sailing_program`))) left join `session_registration_count` `C` on((`B`.`id_sailing_session` = `C`.`id_sailing_session`)));
+CREATE VIEW `session_detail` AS select `A`.`id_sailing_program` AS `id_sailing_program`,`B`.`id_sailing_session` AS `id_sailing_session`,`A`.`class_name` AS `class_name`,`A`.`class_description` AS `class_description`,monthname(`B`.`start_date`) AS `month_name`,dayofmonth(`B`.`start_date`) AS `day_name`,(case when (`A`.`full_day` = 1) then '9:30am to 3:30pm' when (hour(`B`.`start_date`) = 9) then '9am to noon' when (hour(`B`.`start_date`) = 13) then '1pm to 4pm' end) AS `time_of_day`,`B`.`student_limit` AS `student_limit`,`C`.`count_student` AS `count_student`,(`B`.`student_limit` - `C`.`count_student`) AS `spaces_left`,`B`.`start_date` AS `start_date` from ((`sailing_program` `A` left join `sailing_session` `B` on((`A`.`id_sailing_program` = `B`.`id_sailing_program`))) left join `session_registration_count` `C` on((`B`.`id_sailing_session` = `C`.`id_sailing_session`)));
 
 -- --------------------------------------------------------
 
@@ -1321,7 +1321,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `session_registration_count`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `session_registration_count` AS select `A`.`id_sailing_session` AS `id_sailing_session`,count(`B`.`id_student`) AS `count_student` from (`sailing_session` `A` left join `session_students` `B` on((`A`.`id_sailing_session` = `B`.`id_sailing_session`))) group by `A`.`id_sailing_session`;
+CREATE VIEW `session_registration_count` AS select `A`.`id_sailing_session` AS `id_sailing_session`,count(`B`.`id_student`) AS `count_student` from (`sailing_session` `A` left join `session_students` `B` on((`A`.`id_sailing_session` = `B`.`id_sailing_session`))) group by `A`.`id_sailing_session`;
 
 -- --------------------------------------------------------
 
@@ -1330,7 +1330,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `student_detail`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `student_detail` AS select `A`.`paid` AS `paid`,`A`.`first_name` AS `first_name`,`A`.`last_name` AS `last_name`,cast(`A`.`birth_date` as date) AS `birth_date`,((date_format(now(),_utf8'%Y') - date_format(`A`.`birth_date`,_utf8'%Y')) - (date_format(now(),_utf8'00-%m-%d') < date_format(`A`.`birth_date`,_utf8'00-%m-%d'))) AS `age`,`A`.`school_grade` AS `school_grade`,`C`.`class_name` AS `class_name`,`C`.`spaces_left` AS `spaces_left`,cast(`C`.`start_date` as date) AS `start_date`,`A`.`email1` AS `email1`,`A`.`guardian_one_first_name` AS `parent first name`,`A`.`guardian_one_last_name` AS `parent last name`,`A`.`id_student` AS `id_student` from ((`students` `A` left join `session_students` `B` on((`A`.`id_student` = `B`.`id_student`))) left join `session_detail` `C` on((`B`.`id_sailing_session` = `C`.`id_sailing_session`)));
+CREATE VIEW `student_detail` AS select `A`.`paid` AS `paid`,`A`.`first_name` AS `first_name`,`A`.`last_name` AS `last_name`,cast(`A`.`birth_date` as date) AS `birth_date`,((date_format(now(),_utf8'%Y') - date_format(`A`.`birth_date`,_utf8'%Y')) - (date_format(now(),_utf8'00-%m-%d') < date_format(`A`.`birth_date`,_utf8'00-%m-%d'))) AS `age`,`A`.`school_grade` AS `school_grade`,`C`.`class_name` AS `class_name`,`C`.`spaces_left` AS `spaces_left`,cast(`C`.`start_date` as date) AS `start_date`,`A`.`email1` AS `email1`,`A`.`guardian_one_first_name` AS `parent first name`,`A`.`guardian_one_last_name` AS `parent last name`,`A`.`id_student` AS `id_student` from ((`students` `A` left join `session_students` `B` on((`A`.`id_student` = `B`.`id_student`))) left join `session_detail` `C` on((`B`.`id_sailing_session` = `C`.`id_sailing_session`)));
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
