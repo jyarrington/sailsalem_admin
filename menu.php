@@ -1,6 +1,11 @@
 <?php /**/ ?><?php
 // like i said, we must never forget to start the session
-session_start();
+$sid = session_id();
+if($sid) {
+  echo "Session exists!";
+} else {
+  session_start();
+}
 
 // is the one accessing this page logged in or not?
 if (!isset($_SESSION['admin_is_logged_in'])
