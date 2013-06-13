@@ -183,7 +183,7 @@ class admin_register {
 		
 		$form_student->updateStudentForms($ar_checked_forms);
 			
-		$reg = new register;
+		$reg = new admin_register;
 		$reg->showUpdated () ;
 		
 	}
