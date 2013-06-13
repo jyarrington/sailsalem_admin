@@ -153,11 +153,8 @@ class admin_register {
 
 		// Update existing student
 		} else {
-			
-			var_dump($_POST);
 
 			//Update Student
-			
 			$student->id_student = $_POST["id_student"];
 			
 			$result = $student->update() ;
