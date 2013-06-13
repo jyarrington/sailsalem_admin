@@ -6,6 +6,7 @@ include_once ('session_student.php');
 include_once ('sailing_session.php');
 include ('controls.php') ;
 
+include ('menu.php');
 
 class reports {
 
@@ -218,13 +219,11 @@ class reports {
 		}
 	}
 }
-?>
 
-<?php 
 // Begin base page
 // 
 
-include ('menu.php');
+
 ?>
 
 <link type="text/css" href="http://admin.sailsalem.org/includes/css/datatable-jui.css" rel="stylesheet" ></link>	
