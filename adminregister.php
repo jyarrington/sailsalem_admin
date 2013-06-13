@@ -12,6 +12,8 @@ include ('page.php');
 include ('form_student.php');
 include ('form.php');
 
+include('menu.php');
+
 /*
  * Manages the registration form for the administrator view.
  * @TODO: Need to refactor the various registration forms.
@@ -320,17 +322,7 @@ class admin_register {
 }
 
 
-?>
-
-
-
-
-
-
-<?php
-include('menu.php');
 $page = new page();
-
 
 
 ?>

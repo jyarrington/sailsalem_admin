@@ -60,8 +60,6 @@ class search {
 }
 
 $page = new page;
-
-//$page->echoHeader();
 include('menu.php');
 ?>
 <link type="text/css" href="/includes/css/datatable-jui.css" rel="stylesheet" ></link>	
