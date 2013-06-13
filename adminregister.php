@@ -328,10 +328,10 @@ class admin_register {
 
 
 <?php
-
+include('menu.php');
 $page = new page();
 
-include('menu.php');
+
 
 ?>
 
