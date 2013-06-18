@@ -3,7 +3,7 @@
 include('config.php');
 include('menu.php');
 
-header('Location: search.php');	
+//header('Location: search.php');
 ?>
 
 <p>Welcome to the Sail Salem Program Administration site.  This site is used to manage student 
