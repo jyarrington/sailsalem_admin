@@ -24,7 +24,8 @@ if (!isset($_SESSION['admin_is_logged_in'])
 <title>Sail Salem Program Registration</title>
 
 <link type="text/css" href="/includes/css/styles.css" rel="stylesheet" />
-<script type="text/javascript" src="/includes/jquery.js"></script>
+<!--<script type="text/javascript" src="/includes/jquery.js"></script> -->
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
 <link type="text/css" href="/includes/css/jquery-ui-1.8.2.custom.css" rel="stylesheet" ></link>	
 <script type="text/javascript" src="/includes/js/jquery-ui-1.8.2.custom.min.js" ></script>

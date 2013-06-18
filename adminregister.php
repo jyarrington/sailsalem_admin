@@ -14,6 +14,9 @@ include ('form.php');
 
 include('menu.php');
 
+// allow redirection, even if my page starts to send output to the browser
+ob_start();
+
 /*
  * Manages the registration form for the administrator view.
  * @TODO: Need to refactor the various registration forms.
@@ -75,25 +78,20 @@ class admin_register {
 	}
 
 	function showUpdated () {
-
 		?>
-			<strong>Student Information Updated</strong>
-			
-			   	
-		<?php 
-		header('Location: search.php');
-		 
+    <strong>Student Information Updated</strong>
+    <br/>
+    <a href="/search.php">Return to Search Results</a>
+    <?php
 	}
 	
 	function submit () {
 
 		$student = new student();
 		$session_student = new session_student();
-		$form_student = new form_student();
-									
+
 		$student->first_name = $_POST["first_name"];
-		$student->last_name = $_POST["last_name"];		
-		$student->age = $_POST["age"];
+		$student->last_name = $_POST["last_name"];
 		$student->birth_date = $_POST["birth_date"];
 		$student->address = $_POST["address"];
 		$student->city = $_POST["city"];
@@ -109,79 +107,43 @@ class admin_register {
 		$student->email1 = $_POST["email1"];
 		$student->email2 = $_POST["email2"];
 		$student->emergency_phone = $_POST["emergency_phone"];
-		$student->t_shirt_size = $_POST["t_shirt_size"];
 		$student->notes = $_POST["notes"];
-    $student->paid = $_POST["paid"];
-		
-		if (isset($_POST["cbx_forms"])){
-			$ar_checked_forms = $_POST["cbx_forms"];
-		}
-		
-		//print_r($ar_checked_forms);
-		
-		//print_r($form_student->student_forms);
-		
 
-		
 		$student_type = $_POST["student_type"];
 		
 		// Insert new student
 		if ($student_type == "new" ) {
-
 			$student->getStudentID();
-			
-			//echo "Test for student id" . $student->id_student . "</br>";
-			
 			if ($student->id_student > 0) {
 				echo "This student appears to be already registered.  Email jason@sailsalem.org for assistance." ;
 			} else {
 				$result = $student->insert() ;
-				if ($student->id_student > 0) {	
-
+				if ($student->id_student > 0) {
           foreach ($_POST["id_sailing_session"] as $_id_sailing_session) {
-
             $session_student->id_student = $student->id_student;
             $session_student->id_sailing_session = $_id_sailing_session;
-
             $session_student->insert();
           }
 					
 				}	
 			}
-    } elseif ($_POST['delete']) {
-
+    } elseif (array_key_exists('delete', $_POST)) {
       $student->id_student = $_POST["id_student"];
       $student->delete();
-
 		// Update existing student
 		} else {
-
 			//Update Student
 			$student->id_student = $_POST["id_student"];
-			
 			$result = $student->update() ;
-			
 			// Delete current session and create new session
-			
 			$session_student->id_student = $student->id_student;
-						
 			$session_student->deleteSessionsByStudent($student->id_student);
-
       foreach ( $_POST["id_sailing_session"] as $value) {
      				$session_student->id_sailing_session = $value;
      				$session_student->insert();
       }
     }
 
-
-		
-		// Update form information
-		// TODO: Move the check for form logic into the form_student class Insert and Delete methods
-
-		$form_student->id_student = $student->id_student;
-		
-		$form_student->updateStudentForms($ar_checked_forms);
-			
 		$reg = new admin_register;
 		$reg->showUpdated () ;
 		
@@ -191,11 +153,8 @@ class admin_register {
 	function showRegistrationForm ($id_student) {
 
 		$controls = new controls;
-
 		$student = new student;
 		$session_student = new session_student();
-		$form_student = new form_student();
-
 		echo $id_student;
 		
 		if ($id_student > 0) {
@@ -214,32 +173,13 @@ class admin_register {
       foreach ($rs_sessions as $row) {
          $sr[] = $row["id_sailing_session"];
       }
-
-			$form_student->id_student = $student->id_student;	
-			$forms = $form_student->getByStudent();
-		
-			while ($row = mysql_fetch_object($forms)) {
-				switch ($row->id_form) {
-					case 1:
-						$med_form_checked = "checked";
-						break;
-					case 2:
-						$swim_form_checked = "checked";	
-						break;	
-				};	
-			}
-						
 			$student_type = "existing" ;
 			
-		} else { 
-				
+		} else {
 			$student_type = "new" ;
 			$id_student = 0;
-			
 		}
-
     $str_birthdate = '';
-
     if ($student->birth_date !== 'NULL') {
      $str_birthdate = date('n/j/y', strtotime($student->birth_date));
     }
@@ -281,10 +221,7 @@ class admin_register {
 				<label>Emergency Number		</label><input type="text" class="text" name="emergency_phone" value="<?php echo $student->emergency_phone ?>" tabindex="19"><br/>
 				<label>Notes			</label><input type="text" class="text" name="notes" value="<?php echo $student->notes ?>" tabindex="20"><br/>
 		
-				<b>Forms</b><br/>
-				
-				<label for="med_form">Medical Information		</label><input type="checkbox" class="checkbox" name="cbx_forms[med]" value="1" <?php echo $med_form_checked ?> tabindex="21"><br/>
-				<label for="swim_form">Swim Form			    </label><input type="checkbox" class="checkbox" name="cbx_forms[swim]" value="1" <?php echo $swim_form_checked ?> tabindex="22"><br/>
+				<b>Payment</b><br/>
 				<label for="paid">Paid</label><input type="checkbox" class="checkbox" name="paid" value="1" <?php echo $student->paid ?> tabindex="23"><br/>
 
 <?php
@@ -308,7 +245,6 @@ class admin_register {
 
 			<p>
 				<input type="submit" name="update" value="Save" />
-				<button id="clear_session" value="Clear Class Selection" >Clear Class Session</button>
         <input type="submit" name="delete" value="Delete" />
 			</p>
 

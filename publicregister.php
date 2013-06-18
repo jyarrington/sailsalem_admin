@@ -106,7 +106,7 @@ class public_register {
 		
 		$student->first_name = $_POST["first_name"];
 		$student->last_name = $_POST["last_name"];		
-		$student->age = $_POST["age"];
+//		$student->age = $_POST["age"];
 		$student->birth_date = $_POST["birth_date"];
 		$student->address = $_POST["address"];
 		$student->city = $_POST["city"];
@@ -245,10 +245,10 @@ class public_register {
 				<label for="last_name">Last Name</label><input type="text" name="last_name" value="" tabindex="2"> <br/>
 				<label for="birth_date">BirthDate</label><input type="text" name="birth_date" value="" tabindex="3"> <br/>
 				<label for="address">Address</label><input type="text" name="address" value="" tabindex="4"><br/>
-				<label>City			</label><input type="text" name="city" value="" tabindex="5"><br/>
-				<label>State			</label><input type="text" name="state" value="" tabindex="6"><br/>
-				<label>Zip				</label><input type="text" name="zip" value="" tabindex="7"><br/>
-				<label>SchoolGrade		</label><input type="text" name="school_grade" value="" tabindex="8"><br/>
+				<label for="city">City			</label><input type="text" name="city" value="" tabindex="5"><br/>
+				<label for="state">State			</label><input type="text" name="state" value="" tabindex="6"><br/>
+				<label for="zip">Zip				</label><input type="text" name="zip" value="" tabindex="7"><br/>
+				<label for="school_grade">SchoolGrade		</label><input type="text" name="school_grade" value="" tabindex="8"><br/>
 
 				<b>Parents/Guardian</b><br/>
 				

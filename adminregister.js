@@ -1,6 +1,6 @@
 // .js library for publicregister.php
 
-	document.domain = 'admin.sailsalem.local';
+	//document.domain = 'admin.sailsalem.local';
 	    	
 	function jumpScroll() {
     	window.scroll(0,0); // horizontal and vertical scroll increments
@@ -8,7 +8,7 @@
 	
     $(document).ready(function(){
     
-    	document.domain = 'admin.sailsalem.local';
+    	//document.domain = 'admin.sailsalem.local';
 	
     	// Your code here
     	jQuery.validator.addMethod("phoneUS", function(phone_number, element) {
@@ -35,11 +35,6 @@
     				emergency_number : {required: true, phoneUS: true}
     			}
     	});
- 
-    	$('#clear_session').click(function() {
-	    	  alert('Remember to click save to save changes.');
-	    	  $("#youth_register input:radio").attr("checked", false); 
-	    	});
 
        $("input:checkbox").click(function() {
 

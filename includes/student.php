@@ -23,7 +23,6 @@ class student {
 	var $notes;
 	var $guardian_two_first_name;
 	var $guardian_two_last_name;
-	var $form_consent = "NULL";
 	
 //	function __constructor () {
 //		$db = new db;
@@ -51,9 +50,7 @@ class student {
 			);
 				
 		$rs_students = $db->select($query);
-		
-		//echo mysql_num_rows($rs_students);
-		
+
 		if (mysql_num_rows($rs_students) > 0) {
 			$row = mysql_fetch_array($rs_students);	
 			$this->id_student = $row["id_student"];
@@ -65,13 +62,9 @@ class student {
 	function insert() {
 
 		if ( trim($this->id_student == '')) { $this->id_student = "NULL"; };
-	
 		$db = new db;
-	
 		$link = $db->link();
-
     $str_birthdate = null;
-
     if ($this->birth_date !== null) {
        $str_birthdate = date('Y-m-d', strtotime($this->birth_date));
     }
@@ -120,13 +113,9 @@ class student {
 			mysql_real_escape_string($this->guardian_two_first_name, $link),
 			mysql_real_escape_string($this->guardian_two_last_name, $link),
       mysql_real_escape_string($this->paid, $link)
-			);
+		);
 
-    //var_dump($query);
-
-			$this->id_student = $db->insert("$query");
-						
-			
+		$this->id_student = $db->insert("$query");
 	}
 
 	function update () {

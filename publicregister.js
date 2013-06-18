@@ -1,6 +1,6 @@
 // .js library for publicregister.php
 
-	    	document.domain = 'sailsalem.org';
+	//document.domain = 'sailsalem.org';
 	    	
 	function jumpScroll() {
     	window.scroll(0,0); // horizontal and vertical scroll increments
@@ -8,7 +8,7 @@
 	
     $(document).ready(function(){
     
-    	document.domain = 'sailsalem.org';
+    	//document.domain = 'sailsalem.org';
 	
     	// Your code here
     	jQuery.validator.addMethod("phoneUS", function(phone_number, element) {

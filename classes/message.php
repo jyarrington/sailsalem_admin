@@ -40,8 +40,6 @@ class message {
     $this->subject = $subject;
     $this->body = $body;
     $this->send();
-
-    echo $this->body;
   }
 	/*
 	 * Merge email template with array of tokens and then call the method send
@@ -57,7 +55,7 @@ class message {
 
     $to_array = array();
     foreach ($array as $key => $value) {
-      if (substr($key, 1, 5) == "email") {
+      if (substr($key, 0, 5) == "email") {
         $to_array[] = $value;
       }
 
@@ -69,8 +67,6 @@ class message {
     $this->to = implode(',', $to_array);
     $this->subject = $array["subject"];
     $this->send();
-
-    echo $this->body;
   }
 
   /*
@@ -89,7 +85,7 @@ class message {
     foreach ($results as $message_array) {
 
       /* Add fields */
-      $message_array["subject"] = "Hello there";
+      $message_array["subject"] = "SAIL SALEM - Thank you for registering";
       $message_array["class_date"] = date("F j, Y", strtotime($message_array["start_date"]));
       $message_array["class_time"] = date("g:i a", strtotime($message_array["start_date"]));
 
@@ -108,9 +104,11 @@ class message {
       }
       echo '<div class="block">';
       foreach ($message_array as $key => $value) {
-        echo '<div class="block child">';
-        echo $value;
-        echo '</div>';
+        if ($key <> "body") {
+          echo '<div class="block child">';
+          echo $value;
+          echo '</div>';
+        }
       }
 
       $message = new message();
@@ -124,6 +122,13 @@ class message {
       }
       echo '</div>';
       echo '</div>';
+      echo '<div>';
+      echo $message->to;
+      echo '<br/>';
+      echo $message->subject;
+      echo '<br/>';
+      echo $message->body;
+      echo '<hr/>';
       $row_num++;
     }
   }

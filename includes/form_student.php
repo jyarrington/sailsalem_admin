@@ -39,9 +39,7 @@ class form_student {
 	function insert() {
 
 		$db = new db;
-	
 		$link = $db->link();
-		
 			$query = sprintf("
 				INSERT INTO forms_students 
 				SET
