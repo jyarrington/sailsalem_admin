@@ -70,7 +70,7 @@ class public_register {
 		$confirmation_footer = '
 			<strong>Forms: </strong><br/><br/>
 			
-			<a href="/public/sail_salem_forms_2013.pdf">Swim Form and Medical Information Form</a> <br/><br/>
+			<a href="http://admin.sailsalem.org/public/sail_salem_forms_2013.pdf">Swim Form and Medical Information Form</a> <br/><br/>
 
 			<br><br>
 		';
