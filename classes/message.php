@@ -17,15 +17,15 @@ class message {
    */
 	private function send() {
 
-        global $from_address;
+    global $from_address;
 
 		// To send HTML mail, the Content-type header must be set
 	
-		$this->headers = 
-			'MIME-Version: 1.0' . '\r\n' .
-			'Content-type: text/html; charset=iso-8859-1' . '\r\n' .
-			'From: Sail Salem <' . $from_address . '>\r\n' .
-	    'Reply-To: Sail Salem <' . $from_address . '>\r\n' .
+		$this->headers =
+      'MIME-Version: 1.0' . "\r\n" .
+      'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
+      'From: Sail Salem <' . $from_address . ">\r\n" .
+	    'Reply-To: Sail Salem <' . $from_address . ">\r\n" .
 	    'X-Mailer: PHP/' . phpversion();
 		
 		mail($this->to, $this->subject, $this->body, $this->headers);
