@@ -285,28 +285,13 @@ class student {
 	function getStudentsDetail ( ) {
 
 //TODO: This gets a little more complicated now that we have split names
-			
-		$query = "
-				SELECT 
-				    *
-				    
-				FROM 
-				        student_detail
-				";
-		
-		
+		$query = "SELECT * FROM student_detail";
 		$db = new db;
-		
 		$resultSet = $db->select($query);
-
 		return $resultSet;
-						
 	}
 	
 	function getSessionStudents ($sailing_session ) {
-
-		$ar = new ArrayObject;
-				
 		$query = "
 				SELECT 
 					B.*
@@ -318,15 +303,9 @@ class student {
 				WHERE
 					A.id_sailing_session = " . $sailing_session . "
 				";
-		
-		
 		$db = new db;
-		
 		$resultSet = $db->select($query);
-
-		
 		return $resultSet;
-						
 	}
 
 	function getStudentAndSessionDetail($where_clause) {
@@ -342,6 +321,13 @@ class student {
 				    B.zip,
 				    B.email1,
 				    B.email2,
+				    B.guardian_one_last_name,
+				    B.guardian_one_first_name,
+				    B.guardian_two_last_name,
+				    B.guardian_two_first_name,
+				    B.phone1,
+				    B.phone2,
+				    B.emergency_phone,
 				    C.id_sailing_session,
 				    C.start_date,
 				    C.id_sailing_program,
@@ -350,7 +336,7 @@ class student {
 				    D.full_day,
 				    D.age_group
 				FROM
-				    session_students AS A
+				  session_students AS A
 					LEFT JOIN students AS B ON A.id_student = B.id_student
 					LEFT JOIN sailing_session AS C on A.id_sailing_session = C.id_sailing_session
 					LEFT JOIN sailing_program AS D on C.id_sailing_program = D.id_sailing_program
@@ -363,8 +349,6 @@ class student {
 				ORDER BY
 					B.last_name, B.first_name
 				";
-
-    //echo $query;
     $db = new db;
     $rs = $db->select($query);
     return $rs;
@@ -379,19 +363,15 @@ class student {
 			$ar[0] = '1 = 1';
 		} else if (trim($sailing_session) <> "") {
 			// get just the students from a specific week
-      $start_date = $sailing_session;
-			$ar[1] = "DATEDIFF(C.start_date, '" . $start_date . "') < 1";
+			$ar[1] = "C.id_sailing_session = " . $sailing_session . " ";
 		} else {
 			// get all students -- add nothing to the where clause
 			$ar[2] = '1 = 1';
 		}
-		
 		$where = '';
-		
 		foreach ($ar as $value) {
 			$where .= " AND " . $value;
 		}
-
     $db = new db();
 		$rs = $this->getStudentAndSessionDetail($where);
     $array = $db->results_to_array($rs);
@@ -419,12 +399,7 @@ class student {
 				B.id_student IS NULL " ;
 		
 		$db = new db;
-		
 		$resultSet = $db->select($query);
 		return $resultSet;
-		
 	}
-	
 }
-		
-?>
