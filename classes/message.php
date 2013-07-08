@@ -16,20 +16,18 @@ class message {
    * Send email
    */
 	private function send() {
-
     global $from_address;
-
+    global $bcc_address;
 		// To send HTML mail, the Content-type header must be set
-	
 		$this->headers =
       'MIME-Version: 1.0' . "\r\n" .
-      'Content-type: text/html; charset=iso-8859-1' . "\r\n" .
-      'From: Sail Salem <' . $from_address . ">\r\n" .
-	    'Reply-To: Sail Salem <' . $from_address . ">\r\n" .
+      'Content-type: text/html; charset=iso-8859-1' . '\r\n' .
+      'From: Sail Salem <' . $from_address . '>\r\n' .
+	    'Reply-To: Sail Salem <' . $from_address . '>\r\n' .
+      'CC: Bri Small <' . $from_address . '>\r\n' .
+      'BCC: Jason <' . $bcc_address . '>\r\n' .
 	    'X-Mailer: PHP/' . phpversion();
-		
 		mail($this->to, $this->subject, $this->body, $this->headers);
-
 	}
 
   /*
@@ -47,18 +45,13 @@ class message {
 	 */
   function send_message(array $array, $template) {
     global $path;
-
-
     $this->body = file_get_contents($path[0] . '/emails/' . $template, FILE_USE_INCLUDE_PATH);
-
     $this->subject = $array["subject"];
-
     $to_array = array();
     foreach ($array as $key => $value) {
       if (substr($key, 0, 5) == "email") {
         $to_array[] = $value;
       }
-
       $token = '[' . strtoupper($key) . ']';
       $this->body = str_replace($token, $value, $this->body);
       $this->subject = str_replace($token, $value, $this->subject);
